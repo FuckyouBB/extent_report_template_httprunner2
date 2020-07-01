@@ -166,22 +166,30 @@
                 <div id='charts-row' class='row nm-v nm-h'>
                     <div class='col s12 m6 l6 np-h'>
                         <div class='card-panel nm-v'>
-                            <div class='left panel-name'>Tests</div>
+                            <div class='left panel-name'>用例</div>
                             <div class='chart-box'>
                                 <canvas id='parent-analysis' width='100' height='80'></canvas>
                             </div>
                             <div class='block text-small'>
                             <span class='tooltipped' data-position='top'><span
-                                    class='strong'>{{ stat.testcases.success }}</span> test(s) passed</span>
+                                    class='strong'>{{ stat.teststeps.successes }}</span>  通过</span>
                                 <span class='tooltipped' data-position='top'><span
-                                        class='strong'>{{ stat.testcases.fail }}</span> test(s) failed</span>
+                                        class='strong'>{{ stat.teststeps.failures }}</span>  失败</span>
+                            </div>
+                            <div class='block text-small'>
+                            <span class='strong tooltipped' data-position='top'
+                            >{{ stat.teststeps.errors }}</span>
+                                 错误
+                                <span class='strong tooltipped' data-position='top'
+                                >{{ stat.teststeps.skipped }}</span>
+                                 跳过
                             </div>
                         </div>
                     </div>
 
                     <div class='col s12 m6 l6 np-h'>
                         <div class='card-panel nm-v'>
-                            <div class='left panel-name'>Suites</div>
+                            <div class='left panel-name'>用例组</div>
                             <div class='chart-box'>
                                 <canvas id='child-analysis' width='100' height='80'></canvas>
                             </div>
@@ -190,8 +198,8 @@
                             </span>
                             </div>
                             <div class='block text-small'>
-                                <span id="fail_suites" class='strong tooltipped' data-position='top'></span> suite(s)
-                                failed
+                                <span id="fail_suites" class='strong tooltipped' data-position='top'></span> 
+                                失败
                             </div>
                         </div>
                     </div>
@@ -203,7 +211,7 @@
         <div class='subview-left left'>
 
             <div class='view-summary'>
-                <h5>Suites</h5>
+                <h5>用例组</h5>
                 <ul id='test-collection' class='test-collection'>
 
                     {% for test_suite_summary in details %}
@@ -227,13 +235,13 @@
                         </div>
                         <div class='test-content hide'>
                             <div class='test-time-info'>
-                                <span class='label start-time'>{{ test_suite_summary.time.start_at }}</span>
-                                <span class='label end-time'>{{ '%0.3f'| format(test_suite_summary.time.duration|float) }} seconds</span>
+                                <!--<span class='label start-time'>{{ test_suite_summary.time.start_at }}</span>-->
+                                <span class='label start-time'>{{ '%0.3f'| format(test_suite_summary.time.duration|float) }} s</span>
                             </div>
-                            <div class='test-desc'>Pass: {{ test_suite_summary.stat.successes }} ;
-                                Fail: {{ test_suite_summary.stat.failures }} ;
-                                Error: {{ test_suite_summary.stat.errors }}
-                                Skip: {{ test_suite_summary.stat.skipped }} ;
+                            <div class='test-desc'>通过: {{ test_suite_summary.stat.successes }} ;
+                                失败: {{ test_suite_summary.stat.failures }} ;
+                                错误: {{ test_suite_summary.stat.errors }}
+                                跳过: {{ test_suite_summary.stat.skipped }} ;
                             </div>
                             <div class='test-attributes'>
                                 <div class='category-list'>
@@ -259,7 +267,7 @@
                                 <div class='collapsible-header'>
                                     <div class='node-name'>{{ record.name }}</div>
                                     <span class='node-time'>{{ record.start_timestamp }}</span>
-                                    <span class='node-duration'>response_time: {{ record.meta_datas.stat.response_time_ms }} ms</span>
+                                    <span class='node-duration'>耗时: {{ record.meta_datas.stat.response_time_ms }} ms</span>
                                     {% if  record.status == 'success' %}
                                         <span class='test-status right pass'>pass</span>
                                     {% elif record.status == 'failure' %}
@@ -280,9 +288,9 @@
                                         <table class='bordered table-results'>
                                             <thead>
                                             <tr>
-                                                <th>Status</th>
-                                                <th>Params</th>
-                                                <th>Details</th>
+                                                <th>状态</th>
+                                                <th>参数</th>
+                                                <th>详细信息</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -436,7 +444,7 @@
                 <!-- search -->
                 <div class='chip transparent' alt='Search Tests' title='Search Tests'>
                     <a href="#" class='search-div'>
-                        <i class='material-icons'>search</i> Search
+                        <i class='material-icons'>search</i> 搜索
                     </a>
 
                     <div class='input-field left hide'>
@@ -458,7 +466,7 @@
 
                     <li class='category displayed active'>
                         <div class='category-heading'>
-                            <span class='category-name'>All Suites</span>
+                            <span class='category-name'>用例组</span>
                             <span class='category-status right'>
 							    <span class='label pass'>{{ stat.successes }} </span>
                                 {% if stat.failures != 0 %}
@@ -484,9 +492,9 @@
                                 <table class='bordered table-results'>
                                     <thead>
                                     <tr>
-                                        <th>Timestamp</th>
-                                        <th>TestName</th>
-                                        <th>Status</th>
+                                        <th>时间</th>
+                                        <th>用例名</th>
+                                        <th>状态</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -603,38 +611,38 @@
             <div class='row'>
                 <div class='col s2'>
                     <div class='card-panel r'>
-                        Pass
-                        <div class='panel-lead'>{{ stat.successes }}</div>
+                        通过
+                        <div class='panel-lead'>{{ stat.teststeps.successes }}</div>
                     </div>
                 </div>
                 <div class='col s2'>
                     <div class='card-panel r'>
-                        Fail
-                        <div class='panel-lead'>{{ stat.failures }}</div>
+                        失败
+                        <div class='panel-lead'>{{ stat.teststeps.failures }}</div>
                     </div>
                 </div>
                 <div class='col s2'>
                     <div class='card-panel r'>
-                        Error
-                        <div class='panel-lead'>{{ stat.errors }}</div>
+                        错误
+                        <div class='panel-lead'>{{ stat.teststeps.errors }}</div>
                     </div>
                 </div>
                 <div class='col s2'>
                     <div class='card-panel r'>
-                        Skip
-                        <div class='panel-lead'>{{ stat.skipped }}</div>
+                        跳过
+                        <div class='panel-lead'>{{ stat.teststeps.skipped }}</div>
                     </div>
                 </div>
                 <div class='col s2'>
                     <div class='card-panel r'>
-                        Start
+                        开始时间
                         <div class='panel-lead'>{{ time.start_datetime }}</div>
                     </div>
                 </div>
                 <div class='col s2'>
                     <div class='card-panel r'>
-                        Time Taken
-                        <div class='panel-lead'>{{ '%0.3f'| format(time.duration|float) }} seconds</div>
+                        耗时
+                        <div class='panel-lead'>{{ '%0.3f'| format(time.duration|float) }} s</div>
                     </div>
                 </div>
                 <div class='col s4'>
@@ -644,13 +652,13 @@
                         <table>
                             <tr>
                                 <th>名称</th>
-                                <th>Passed</th>
-                                <th>Failed</th>
-                                <th>Errored</th>
-                                <th>Skipped</th>
+                                <th>通过</th>
+                                <th>失败</th>
+                                <th>错误</th>
+                                <th>跳过</th>
                             </tr>
                             <tr>
-                                <td>All Suites</td>
+                                <td>用例组</td>
                                 <td class="pass">{{ stat.successes }}</td>
                                 <td class="fail">{{ stat.failures }}</td>
                                 <td class="error">{{ stat.errors }}</td>
@@ -713,7 +721,7 @@
         exceptionsGrandChild: 0,
     };
 
-    document.getElementById('pass_suites').innerHTML = "<span class='strong'>" + test_suite_success + "</span> suite(s) passed";//找到id为'myId'的标签内插入html变量的值
+    document.getElementById('pass_suites').innerHTML = "<span class='strong'>" + test_suite_success + "</span>  通过";//找到id为'myId'的标签内插入html变量的值
     document.getElementById('fail_suites').innerText = {{ details|length }} -test_suite_success;//找到id为'myId'的标签替换它的内容为html的值
 
 </script>
