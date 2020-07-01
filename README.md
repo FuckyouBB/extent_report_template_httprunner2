@@ -10,4 +10,4 @@ $ hrun demo-quickstart.yml --report-template extent-theme-template.html
 
 
 ## Html Output
-![Extent](https://github.com/FuckyouBB/extent_report_template_httprunner2/master/one.png)<br>
+![Extent](https://github.com/FuckyouBB/extent_report_template_httprunner2/blob/master/one.png)<br>
