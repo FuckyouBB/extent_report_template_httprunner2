@@ -1,0 +1,2 @@
+# extent_report_template_httprunner2
+将extent_report_template为httprunner2做的适配
