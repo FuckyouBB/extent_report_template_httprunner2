@@ -267,7 +267,7 @@
                                 <div class='collapsible-header'>
                                     <div class='node-name'>{{ record.name }}</div>
                                     <span class='node-time'>{{ record.start_timestamp }}</span>
-                                    <span class='node-duration'>耗时: {{ record.meta_datas.stat.response_time_ms }} ms</span>
+                                    <span class='node-duration'>耗时: {{ record.response_time }} ms</span>
                                     {% if  record.status == 'success' %}
                                         <span class='test-status right pass'>pass</span>
                                     {% elif record.status == 'failure' %}
@@ -280,10 +280,12 @@
 
                                 </div>
                                 <div class='collapsible-body'>
-                                    <div class='category-list right'>
+                                    {% for medata in record.meta_datas_expanded %}
+                                    <div class='category-list right'style="margin-top:20px">
                                         <span class='category label white-text'>{{ test_suite_summary.name }}</span>
-                                        <span class='category label white-text'>{{ record.name }}</span>
+                                        <span class='category label white-text'>{{ medata.name }}</span>
                                     </div>
+                                    
                                     <div class='node-steps'>
                                         <table class='bordered table-results'>
                                             <thead>
@@ -298,28 +300,28 @@
                                                 <td class='status info' title='info' alt='info'><i
                                                         class='material-icons'>low_priority</i></td>
                                                 <td class='timestamp'>url</td>
-                                                {% for medata in record.meta_datas.data %}
-                                                <td class='step-details'>{{ medata.request.url }}</td>
+                                                {% for medatad in medata.data %}
+                                                <td class='step-details'>{{ medatad.request.url }}</td>
                                                 {% endfor %}
                                             </tr>
                                             <tr class='info' status='info'>
                                                 <td class='status info' title='info' alt='info'><i
                                                         class='material-icons'>low_priority</i></td>
                                                 <td class='timestamp'>method</td>
-                                                {% for medata in record.meta_datas.data %}
-                                                <td class='step-details'>{{ medata.request.method }}</td>
+                                                {% for medatad in medata.data %}
+                                                <td class='step-details'>{{ medatad.request.method }}</td>
                                                 {% endfor %}
                                             </tr>
                                             <tr class='info' status='info'>
                                                 <td class='status info' title='info' alt='info'><i
                                                         class='material-icons'>low_priority</i></td>
                                                 <td class='timestamp'>status_code</td>
-                                                {% for medata in record.meta_datas.data %}
-                                                <td class='step-details'>{{ medata.response.status_code }}</td>
+                                                {% for medatad in medata.data %}
+                                                <td class='step-details'>{{ medatad.response.status_code }}</td>
                                                 {% endfor %}
                                             </tr>
-                                            {% for medata in record.meta_datas.data %}
-                                            {% for key, value in medata.request.items() %}
+                                            {% for medatad in medata.data %}
+                                            {% for key, value in medatad.request.items() %}
                                                 {% if key != 'url' and key != 'method' and key != 'start_timestamp' %}
                                                     <tr class='log' status='debug'>
                                                         <td class='status debug' title='debug' alt='debug'><i
@@ -333,7 +335,7 @@
                                             {% endfor %}
 
 
-                                            {% for key, value in medata.response.items() %}
+                                            {% for key, value in medatad.response.items() %}
                                                 {% if key != "json" and key != "elapsed_ms" and key != "response_time_ms" and key != "content_size" and key != "content_type" and key != "status_code" and key != "reason" and key != "ok" and key != "encoding" and key != "url" %}
                                                     <tr class='log' status='debug'>
                                                         <td class='status debug' title='debug' alt='debug'><i
@@ -344,7 +346,7 @@
                                                                 {% if "image" in medata.response.content_type %}
                                                                     <img src="{{ medata.response.content }}"/>
                                                                 {% else %}
-                                                                    <pre>{{ medata.response.text | e }}</pre>
+                                                                    <pre>{{ medatad.response.text | e }}</pre>
                                                                 {% endif %}
                                                             {% else %}
                                                                 {{ value }}
@@ -360,7 +362,7 @@
                                                         class='material-icons'>low_priority</i></td>
                                                 <td class='timestamp'>Validators</td>
                                                 <td class='step-details'>
-                                                    {% for validator in record.meta_datas.validators %}
+                                                    {% for validator in medata.validators %}
                                                         <div>
                                                             <strong>{{ validator.comparator }}:</strong>[ {{ validator.expect }}
                                                             ,&nbsp;&nbsp;{{ validator.check_value }} ]
@@ -375,13 +377,13 @@
                                                 <td class='timestamp'>Statistics</td>
                                                 <td class='step-details'>
                                                     <div>
-                                                        content_size(bytes): {{ record.meta_datas.stat.content_size }}
+                                                        content_size(bytes): {{ medata.stat.content_size }}
                                                     </div>
                                                     <div>
-                                                        response_time(ms): {{ record.meta_datas.stat.response_time_ms }}
+                                                        response_time(ms): {{ medata.stat.response_time_ms }}
                                                     </div>
                                                     <div>
-                                                        elapsed(ms): {{ record.meta_datas.stat.elapsed_ms }}
+                                                        elapsed(ms): {{ medata.stat.elapsed_ms }}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -400,6 +402,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    {% endfor %}
                                 </div>
                                 </li>
                                 {% endfor %}
