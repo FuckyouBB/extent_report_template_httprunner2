@@ -362,9 +362,9 @@
                                                         class='material-icons'>low_priority</i></td>
                                                 <td class='timestamp'>Validators</td>
                                                 <td class='step-details'>
-                                                    {% for validator in medata.validators %}
+                                                    {% for validator in medata.validators.validate_extractor %}
                                                         <div>
-                                                            <strong>{{ validator.comparator }}:</strong>[ {{ validator.expect }}
+                                                            <font color="#00BFFF">{{ validator.check }}&nbsp;&nbsp;&nbsp;</font><strong>{{ validator.comparator }}:</strong>[ {{ validator.expect }}
                                                             ,&nbsp;&nbsp;{{ validator.check_value }} ]
                                                         </div>
                                                     {% endfor %}
